@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+
 template<class T>
 class Array
 {
@@ -33,7 +34,7 @@ public:
 	void ClearArray();
 
 	//交换两索引上的数
-	void ExchangeArrayById(int n1, int n2);
+	void ExchangeArrayById(int n1,int n2);
 
 	//反转数组
 	void ReverseArray();
@@ -42,41 +43,49 @@ private:
 	T* arr;
 };
 
+//构造器
 template<class T>
 Array<T>::~Array()
 {
 	free(this->arr);
 }
 
+//析构函数
 template<class T>
 Array<T>::Array(int len)
 {
 	this->len = len;
 	this->arr = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(len) + 2));
-	for (int j = 0; j < len; j++)
+	if (arr != NULL)
 	{
-		std::cout << "请输入第" << j + 1 << "个元素" << std::endl;
-		std::cin >> this->arr[j];
+		for (int j = 0; j < len; j++)
+		{
+			std::cout << "请输入第" << j + 1 << "个元素" << std::endl;
+			std::cin >> this->arr[j];
+		}
 	}
 }
 
+/*获取数组长度*/
 template<class T>
 int Array<T>::Arraylength()
 {
 	return this->len;
 }
 
+/*打印数组*/
 template<class T>
 void Array<T>::PrintArray()
 {
 	if (this->arr == NULL) return;
 	for (int i = 0; i < this->len; i++)
 	{
-		std::cout << "第" << i + 1 << "个元素为";
+		std::cout << "第" << i+1 << "个元素为";
 		std::cout << this->arr[i] << std::endl;
 	}
 }
 
+/*头插*/
 template<class T>
 void Array<T>::InsertBefore(T val)
 {
@@ -90,19 +99,25 @@ void Array<T>::InsertBefore(T val)
 	this->arr = tem;
 }
 
+/*尾插*/
 template<class T>
 void Array<T>::InsertEnd(T val)
 {
 	this->len++;
-	T* tem = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(this->len) + 2));
-	for (int i = 0; i < len; i++)
+	T* tem = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(this->len + 2)));
+	if (tem != NULL)
 	{
-		tem[i] = this->arr[i];
+		for (int i = 0; i < len; i++)
+		{
+			tem[i] = this->arr[i];
+		}
+		tem[len - 1] = val;
+		this->arr = tem;
 	}
-	tem[len - 1] = val;
-	this->arr = tem;
 }
 
+
+/*求和*/
 template<class T>
 int Array<T>::ArrayCount()
 {
@@ -115,24 +130,27 @@ int Array<T>::ArrayCount()
 	return count;
 }
 
+/*删除指定节点*/
 template<class T>
 void Array<T>::ArrayDelete(int n)
 {
 	if (this->arr == NULL) return;
-	for (int i = n; i < this->len - 1; i++)
+	for (int i = n; i < this->len-1; i++)
 	{
 		arr[i] = arr[i + 1];
 	}
 	this->len--;
 }
 
+/*获得该位置的值*/
 template<class T>
 T Array<T>::ArrayGetById(int n)
 {
-	if (this->arr == NULL || this->len < n + 1) return;
+	if (this->arr == NULL || this->len < n + 1) return INT_MIN;
 	return this->arr[n];
 }
 
+//清空数组
 template<class T>
 void Array<T>::ClearArray()
 {
@@ -141,19 +159,21 @@ void Array<T>::ClearArray()
 	this->arr = NULL;
 }
 
+//交换两索引上的数
 template<class T>
 void Array<T>::ExchangeArrayById(int n1, int n2)
 {
 	if (this->arr == NULL || this->len < n1 + 1 || this->len < n2 + 1) return;
-	this->arr[n1] = this->arr[n1] + this->arr[n2];
-	this->arr[n2] = this->arr[n1] - this->arr[n2];
-	this->arr[n1] = this->arr[n1] - this->arr[n2];
+	this -> arr[n1] = this -> arr[n1] + this -> arr[n2];
+	this -> arr[n2] = this -> arr[n1] - this -> arr[n2];
+	this -> arr[n1] = this -> arr[n1] - this -> arr[n2];
 }
 
+//反转数组
 template<class T>
 void Array<T>::ReverseArray()
 {
-	T* tem = (T*)malloc(sizeof(T) * (this->len + 2));
+	T* tem = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(this->len) + 2));
 	if (tem != NULL)
 	{
 		for (int i = this->len - 1; i >= 0; i--)
@@ -167,3 +187,4 @@ void Array<T>::ReverseArray()
 		return;
 	}
 }
+

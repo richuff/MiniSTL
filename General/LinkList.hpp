@@ -6,6 +6,7 @@ class LinkList
 {
 public:
 	LinkList();
+	LinkList(int len);
 	~LinkList();
 	//创建链表--头插法
 	//传入一个带头结点的链表
@@ -18,7 +19,7 @@ public:
 	int LinkListlength(LinkList* L);
 
 	//打印链表
-	void LinkListprint(LinkList* L);
+	void LinkListprint();
 
 	//遍历链表的函数
 	//获得该位置的指针域
@@ -51,16 +52,28 @@ public:
 
 	//删除指定节点
 	LinkList* deleteLinkListbyid(LinkList* L, int l1);
+	//在指定位置插入指定值
+	LinkList* InsertValue(LinkList* L, int e, int num);
 private:
 	T val;
 	LinkList* Ln;
 };
+
 template<class T>
 LinkList<T>::LinkList()
 {
 	this->val = 0;
 	this->Ln = NULL;
 }
+
+template<class T>
+
+LinkList<T>::LinkList(int len)
+{
+	this->Ln=CreatLinkList_back(len);
+}
+
+
 template<class T>
 LinkList<T>::~LinkList()
 {
@@ -141,20 +154,22 @@ int LinkList<T>::LinkListlength(LinkList* L)
 
 //打印链表
 template<class T>
-void LinkList<T>::LinkListprint(LinkList* L)
+void LinkList<T>::LinkListprint()
 {
 	int i = 0;
-	if (L == NULL || L->Ln == NULL)
+	if (this->Ln == NULL || this->Ln->Ln == NULL)
 	{
 		std::cout << "error" << std::endl;
 		return;
 	}
-	L = L->Ln;
-	while (L != NULL)
+	LinkList* tem = new LinkList();
+	tem = this->Ln;
+	tem = tem->Ln;
+	while (tem != NULL)
 	{
 		std::cout << "第" << ++i << "个元素为";
-		std::cout << L->val << std::endl;
-		L = L->Ln;
+		std::cout << tem->val << std::endl;
+		tem = tem->Ln;
 	}
 }
 
@@ -197,6 +212,35 @@ LinkList<T>* LinkList<T>::InsertLinkList(LinkList* L, int e)
 	p->Ln = NULL;
 	std::cout << "请输入结点的值" << std::endl;
 	std::cin >> p->val;
+	//头结点的下一个为空，即只有一个头结点
+	if (L->Ln == NULL)
+	{
+		L->Ln = p;
+	}
+	//取到前一个元素的指针域
+	else
+	{
+		LinkList* temp = LinkListTraverse(L, e - 1);
+		//新建结点的指针域指向索引前的指针域
+		p->Ln = temp->Ln;
+		//修改索引前的指针域指向新建指针
+		temp->Ln = p;
+	}
+	return L;
+}
+
+//在指定位置插入指定值
+template<class T>
+LinkList<T>* LinkList<T>::InsertValue(LinkList* L, int e,int num)
+{
+	if (e <= 0)
+	{
+		std::cout << "ERROR" << std::endl;
+		return 0;
+	}
+	LinkList* p = new LinkList();
+	p->Ln = NULL;
+	p -> val = num;
 	//头结点的下一个为空，即只有一个头结点
 	if (L->Ln == NULL)
 	{
