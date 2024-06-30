@@ -7,11 +7,12 @@ class LinkList
 public:
 	LinkList();
 	LinkList(int len);
+	LinkList(int len, T res);
 	~LinkList();
 	//创建链表--头插法
 	//传入一个带头结点的链表
 	LinkList* CreatLinkList_head(int length);
-
+	LinkList* CreateLinkListByNum(int length, T res);
 	//创建链表尾插法
 	LinkList* CreatLinkList_back(int length);
 
@@ -54,6 +55,8 @@ public:
 	LinkList* deleteLinkListbyid(LinkList* L, int l1);
 	//在指定位置插入指定值
 	LinkList* InsertValue(LinkList* L, int e, int num);
+	//头删
+	LinkList* popLinkList(LinkList* L);
 private:
 	T val;
 	LinkList* Ln;
@@ -66,13 +69,38 @@ LinkList<T>::LinkList()
 	this->Ln = NULL;
 }
 
+//构造函数
 template<class T>
-
 LinkList<T>::LinkList(int len)
 {
 	this->Ln=CreatLinkList_back(len);
 }
 
+//构造函数
+template<class T>
+LinkList<T>::LinkList(int length, T res) {
+	this->Ln = CreateLinkListByNum(length, res);
+}
+
+template<class T>
+LinkList<T>* LinkList<T>::CreateLinkListByNum(int length, T res) {
+	//头结点
+	LinkList* L1 = new LinkList();
+	L1->Ln = NULL;
+	//头指针
+	LinkList* p = L1;
+	for (int i = length - 1; i >= 0; i--)
+	{
+		LinkList* temp = new LinkList();
+		temp->val = res;
+		//开始头插
+		//先修改插入链表的指针域
+		temp->Ln = p->Ln;
+		//再修改头结点的指针域
+		p->Ln = temp;
+	}
+	return p;
+}
 
 template<class T>
 LinkList<T>::~LinkList()
@@ -384,4 +412,10 @@ LinkList<T>* LinkList<T>::deleteLinkListbyid(LinkList* L, int l1)
 	temp1->Ln = temp2->Ln;
 	delete temp2;
 	return L;
+}
+
+//头删
+template<class T>
+LinkList<T>* LinkList<T>::popLinkList(LinkList* L) {
+	return L->Ln;
 }

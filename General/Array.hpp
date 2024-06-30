@@ -8,6 +8,7 @@ public:
 	/*构造器*/
 	~Array();
 	Array(int len);
+	Array(int len, T num);
 
 	/*获取数组长度*/
 	int Arraylength();
@@ -43,14 +44,15 @@ private:
 	T* arr;
 };
 
-//构造器
+
+//析构函数
 template<class T>
 Array<T>::~Array()
 {
 	free(this->arr);
 }
 
-//析构函数
+//构造器
 template<class T>
 Array<T>::Array(int len)
 {
@@ -65,6 +67,22 @@ Array<T>::Array(int len)
 		}
 	}
 }
+
+//构造器
+template<class T>
+Array<T>::Array(int len, T num)
+{
+	this->len = len;
+	this->arr = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(len) + 2));
+	if (arr != NULL)
+	{
+		for (int j = 0; j < len; j++)
+		{
+			this->arr[j]=num;
+		}
+	}
+}
+
 
 /*获取数组长度*/
 template<class T>
