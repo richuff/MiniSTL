@@ -39,6 +39,12 @@ public:
 
 	//反转数组
 	void ReverseArray();
+
+	//按一定顺序打印数组
+	void PrintArrayFromTo(int front, int rear);
+
+	//修改指定索引的值
+	void ChangeValue(int index,int value);
 private:
 	int len;
 	T* arr;
@@ -62,8 +68,7 @@ Array<T>::Array(int len)
 	{
 		for (int j = 0; j < len; j++)
 		{
-			std::cout << "请输入第" << j + 1 << "个元素" << std::endl;
-			std::cin >> this->arr[j];
+			this->arr[j] = 0;
 		}
 	}
 }
@@ -98,8 +103,18 @@ void Array<T>::PrintArray()
 	if (this->arr == NULL) return;
 	for (int i = 0; i < this->len; i++)
 	{
-		std::cout << "第" << i+1 << "个元素为";
 		std::cout << this->arr[i] << std::endl;
+	}
+}
+
+/*打印数组按照一定的顺序*/
+template<class T>
+void Array<T>::PrintArrayFromTo(int front,int rear)
+{
+	if (this->arr == NULL) return;
+	for (int i = front; i % this->len < rear; i++)
+	{
+		std::cout << this->arr[i % this->len] << std::endl;
 	}
 }
 
@@ -206,3 +221,8 @@ void Array<T>::ReverseArray()
 	}
 }
 
+//修改指定索引的值
+template<class T>
+void Array<T>::ChangeValue(int index, int value) {
+	this->arr[index] = value;
+}
