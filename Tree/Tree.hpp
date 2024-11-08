@@ -52,70 +52,70 @@ void Tree<T>::printTree()
 template<class T>
 char Tree<T>::root()
 {
-    if (this->curNum == 0) return "#";
+    if (this->curNum == 0) return '#';
     return this->ele[0];
 }
 
-/*求二叉树T中指定结点ch的双亲结点，返回值是双亲结点的下标，若双亲不存在，则返回-1*/
+/*求二叉树T中指定结点ch的双亲结点，返回值是双亲结点的下标，若双亲不存在，返回-1*/
 template<class T>
 int Tree<T>::parent(char ch)
 {
     int res = 0;
-    for (int i = 0; i < T->curNum; i++) {
-        if (T->ele[i] == ch) {
+    for (int i = 0; i < this->curNum; i++) {
+        if (this->ele[i] == ch) {
             res = (i - 3) / 2;
         }
     }
-    if (res < 0 || T->ele[res] == ' ') {
+    if (res < 0 || this->ele[res] == ' ') {
         return -1;
     }
     return res;
 }
 
-/*求二叉树T中指定结点ch的左孩子的下标，若左孩子不存在，则返回-1*/
+/*求二叉树T中指定结点ch的左孩子的下标，若左孩子不存在，返回-1*/
 template<class T>
 int Tree<T>::leftChild(char ch)
 {
-    int res;
-    for (int i = 0; i < T->curNum; i++) {
-        if (T->ele[i] == ch) {
+    int res = 0;
+    for (int i = 0; i < this->curNum; i++) {
+        if (this->ele[i] == ch) {
             res = 2 * i + 1;
         }
     }
-    if (res > T->curNum || T->ele[res - 1] == ' ') {
+    if (res > this->curNum || this->ele[res - 1] == ' ') {
         return -1;
     }
     return res;
 }
 
-/*求二叉树T中指定结点ch的右孩子的下标，若左孩子不存在，则返回-1*/
+/*求二叉树T中指定结点ch的右孩子的下标，若左孩子不存在，返回-1*/
 template<class T>
 int Tree<T>::rightChild(char ch)
 {
-    int res;
-    for (int i = 0; i < T->curNum; i++) {
-        if (T->ele[i] == ch) {
+    int res = 0;
+    for (int i = 0; i < this->curNum; i++) {
+        if (this->ele[i] == ch) {
             res = 2 * i + 2;
         }
     }
-    if (res > T->curNum) {
+    if (res > this->curNum) {
         return -1;
     }
     return res;
 }
 
-/*层序遍历二叉树，输出遍历得到的结点，结点之间不需要空格*/
+/*层序遍历二叉树，输出遍历得到的结点*/
 template<class T>
 void Tree<T>::levelOrder()
 {
-    for (int i = 0; i < T->curNum; i++) {
-        if (T->ele[i] != ' ') {
-            printf("%c", T->ele[i]);
+    for (int i = 0; i < this->curNum; i++) {
+        if (this->ele[i] != ' ') {
+            printf("%c ", this->ele[i]);
         }
     }
 }
 
-/*先序遍历二叉树，输出遍历得到的结点，结点之间不需要空格*/
+/*先序遍历二叉树，输出遍历得到的结点*/
 template<class T>
 void Tree<T>::preOrder() {
     static int index = 0;
@@ -124,15 +124,15 @@ void Tree<T>::preOrder() {
     int currentIndex = index;
 
 
-    if (currentIndex < T->curNum && T->ele[currentIndex] != ' ') {
+    if (currentIndex < this->curNum && this->ele[currentIndex] != ' ') {
 
-        printf("%c", T->ele[currentIndex]);
+        printf("%c", this->ele[currentIndex]);
 
         index = 2 * currentIndex + 1;
-        preOrder(T);
+        preOrder();
 
         index = 2 * currentIndex + 2;
-        preOrder(T);
+        preOrder();
     }
 
     index = currentIndex;
