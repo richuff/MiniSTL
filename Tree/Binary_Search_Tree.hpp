@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 // 数据结构定义

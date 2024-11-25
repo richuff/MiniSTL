@@ -17,27 +17,27 @@ public:
 	LinkList* CreatLinkList_back(int length);
 
 	//统计链表的长度
-	int LinkListlength(LinkList* L);
+	int LinkListlength();
 
 	//打印链表
 	void LinkListprint();
 
 	//遍历链表的函数
 	//获得该位置的指针域
-	LinkList* LinkListTraverse(LinkList* L, int n);
+	LinkList* LinkListTraverse(int n);
 
 	//插入一个结点
 	//e为插入的位置,遍历到e-1的位置
-	LinkList* InsertLinkList(LinkList* L, int e);
+	void InsertLinkList(int e);
 
 	//获得指定索引的值
-	T getvalLinkList(LinkList* L, int e);
+	T getvalLinkList(int e);
 
 	//清空链表
-	LinkList* ClearLinkList(LinkList* L);
+	void ClearLinkList();
 
 	//删除链表
-	void DeleteLinkList(LinkList* L);
+	void DeleteLinkList();
 
 	//合并链表
 	LinkList* groupLinkList(LinkList* L1, LinkList* L2);
@@ -163,19 +163,20 @@ LinkList<T>* LinkList<T>::CreatLinkList_back(int length)
 
 //统计链表的长度
 template<class T>
-int LinkList<T>::LinkListlength(LinkList* L)
+int LinkList<T>::LinkListlength()
 {
 	int len = 0;
-	if (L == NULL || L->Ln == NULL)
+	LinkList<T>* temp = this->Ln;
+	if (temp == NULL || temp->Ln == NULL)
 	{
 		std::cout << "error" << std::endl;
 		return -1;
 	}
-	L = L->Ln;
-	while (L != NULL)
+	temp = temp->Ln;
+	while (temp != NULL)
 	{
 		len++;
-		L = L->Ln;
+		temp = temp->Ln;
 	}
 	return len;
 }
@@ -204,9 +205,9 @@ void LinkList<T>::LinkListprint()
 //遍历链表的函数
 //获得该位置的指针域
 template<class T>
-LinkList<T>* LinkList<T>::LinkListTraverse(LinkList* L, int n)
+LinkList<T>* LinkList<T>::LinkListTraverse(int n)
 {
-	L = L->Ln;
+	LinkList<int>* L = this->Ln;
 	if (n == 0)
 	{
 		return L;
@@ -229,32 +230,31 @@ LinkList<T>* LinkList<T>::LinkListTraverse(LinkList* L, int n)
 //插入一个结点
 //e为插入的位置,遍历到e-1的位置
 template<class T>
-LinkList<T>* LinkList<T>::InsertLinkList(LinkList* L, int e)
+void LinkList<T>::InsertLinkList(int e)
 {
-	if (e <= 0)
+	if (e < 0)
 	{
 		std::cout << "ERROR" << std::endl;
-		return 0;
+		return;
 	}
 	LinkList* p = new LinkList();
 	p->Ln = NULL;
 	std::cout << "请输入结点的值" << std::endl;
 	std::cin >> p->val;
 	//头结点的下一个为空，即只有一个头结点
-	if (L->Ln == NULL)
+	if (this->Ln == NULL)
 	{
-		L->Ln = p;
+		this->Ln = p;
 	}
 	//取到前一个元素的指针域
 	else
 	{
-		LinkList* temp = LinkListTraverse(L, e - 1);
+		LinkList* temp = this->LinkListTraverse(e);
 		//新建结点的指针域指向索引前的指针域
 		p->Ln = temp->Ln;
 		//修改索引前的指针域指向新建指针
 		temp->Ln = p;
 	}
-	return L;
 }
 
 //在指定位置插入指定值
@@ -288,43 +288,43 @@ LinkList<T>* LinkList<T>::InsertValue(LinkList* L, int e,int num)
 
 //获得指定索引的值
 template<class T>
-T LinkList<T>::getvalLinkList(LinkList* L, int e)
+T LinkList<T>::getvalLinkList(int e)
 {
-	int length = LinkListlength(L);
+	if (e == 0) {
+		return this->val;
+	}
+	int length = this->LinkListlength();
 	if (e > length - 1 || e < 0)
 	{
 		std::cout << "没有该索引" << std::endl;
 		return -1;
 	}
-	LinkList* l1 = LinkListTraverse(L, e + 1);
+	LinkList* l1 = this->LinkListTraverse(e + 1);
 	return l1->val;
 }
 
 //清空链表
 template<class T>
-LinkList<T>* LinkList<T>::ClearLinkList(LinkList* L)
+void LinkList<T>::ClearLinkList()
 {
-	LinkList* nLn = new LinkList();
-	nLn->Ln = NULL;
-	int length = LinkListlength(L);
 
-	for (int i = 0; i < length - 1; i++)
+	LinkList* link = this->Ln;
+
+	while(link != NULL)
 	{
-		LinkList* temp = L->Ln;
-
-		delete L;
-
-		L = temp->Ln;
+		LinkList* temp = link;
+		link = link->Ln;
+		delete temp;
 	}
-	delete L;
-	return nLn;
+	delete link;
 }
 
 //删除链表
 template<class T>
-void LinkList<T>::DeleteLinkList(LinkList* L)
+void LinkList<T>::DeleteLinkList()
 {
-	int length = LinkListlength(L);
+	LinkList* L = this;
+	int length = this->LinkListlength();
 	for (int i = 0; i < length - 1; i++)
 	{
 		LinkList* temp = L->Ln;
@@ -412,10 +412,4 @@ LinkList<T>* LinkList<T>::deleteLinkListbyid(LinkList* L, int l1)
 	temp1->Ln = temp2->Ln;
 	delete temp2;
 	return L;
-}
-
-//头删
-template<class T>
-LinkList<T>* LinkList<T>::popLinkList(LinkList* L) {
-	return L->Ln;
 }
