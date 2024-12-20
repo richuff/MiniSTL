@@ -8,9 +8,9 @@ LinkList<int>* list = new LinkList<int>();
 
 ### 2.LinkList(int len);
 
-`length` 创建的长度
+`length` 创建的长度 长度必须大于0
 
-> 有参构造函数，指定生成链表的长度
+> 有参构造函数，指定生成链表的长度 
 
 ```c++
 //创建一个长度为10的链表
@@ -114,7 +114,7 @@ LinkList<int>* list = new LinkList<int>(3);
 list->InsertLinkList(1);  //在下标为1的位置插入元素
 ```
 
-### 12.T getvalLinkList(int e);
+### 12.T getvalLinkList(int n);
 
 - n `索引位置`
 
@@ -125,50 +125,71 @@ LinkList<int>* list = new LinkList<int>(3);
 cout << list->getvalLinkList(0) << endl;
 ```
 
-### 13.LinkList* ClearLinkList(LinkList* L);
-
-> 清空链表
-
-
-
-### 14.void DeleteLinkList(LinkList* L);
+### 14.void DeleteLinkList();
 
 > 删除链表
 
+```c++
+list->DeleteLinkList();
+```
 
-
-### 15.LinkList* groupLinkList(LinkList* L1, LinkList* L2);
+### 15.void groupLinkList(LinkList* L2);
 
 > 合并链表
 
+```c++
+LinkList<int>* list = new LinkList<int>(2);
 
+LinkList<int>* list2 = new LinkList<int>(2);
+
+list->groupLinkList(list2);
+list->LinkListprint();
+```
 
 ### 16.LinkList* reverseLinkList(LinkList* L);
 
 > 反转链表
 
+```c++
+list->reverseLinkList();
+```
 
-
-### 17.T countLinkList(LinkList* L);
+### 17.T countLinkList();
 
 > 求和链表上的数
 
-
+```c++
+int res = list->countLinkList();
+cout << res << endl;
+```
 
 ### 18.LinkList* exchangeLinkList(LinkList* L1, int l1, int l2);
 
 > 交换两索引上的数
 
-
+```c++
+list->exchangeLinkList(0, 3); 交换索引为0和3的节点
+```
 
 ### 19.LinkList* deleteLinkListbyid(LinkList* L, int l1);
 
 > 删除指定节点
 
+```c++
+list->deleteLinkListbyid(2); 删除索引为2的节点
+```
 
-
-### 20.LinkList* InsertValue(LinkList* L, int e, int num);
+### 20.void InsertValue(int e, int num);
 
 > 在指定位置插入指定值
 
+21.
+
+> 头插入元素
+
+
+
+22.
+
+>尾部插入元素
 

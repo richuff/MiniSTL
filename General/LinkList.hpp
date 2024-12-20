@@ -40,23 +40,23 @@ public:
 	void DeleteLinkList();
 
 	//合并链表
-	LinkList* groupLinkList(LinkList* L1, LinkList* L2);
+	void groupLinkList(LinkList* L2);
 
 	//反转链表
-	LinkList* reverseLinkList(LinkList* L);
+	void reverseLinkList();
 
 	//求和链表上的数
-	T countLinkList(LinkList* L);
+	T countLinkList();
 
 	//交换两索引上的数
-	LinkList* exchangeLinkList(LinkList* L1, int l1, int l2);
+	void exchangeLinkList(int l1, int l2);
 
 	//删除指定节点
-	LinkList* deleteLinkListbyid(LinkList* L, int l1);
+	void deleteLinkListbyid(int l1);
 	//在指定位置插入指定值
-	LinkList* InsertValue(LinkList* L, int e, int num);
-	//头删
-	LinkList* popLinkList(LinkList* L);
+	void InsertValue(int e, int num);
+	//头插入元素
+	void insertHead(int num);
 private:
 	T val;
 	LinkList* Ln;
@@ -73,6 +73,10 @@ LinkList<T>::LinkList()
 template<class T>
 LinkList<T>::LinkList(int len)
 {
+	if (len <= 0) {
+		std::cout << "the linklist's length must greater than 0" << std::endl;
+		return;
+	}
 	this->Ln=CreatLinkList_back(len);
 }
 
@@ -86,7 +90,6 @@ template<class T>
 LinkList<T>* LinkList<T>::CreateLinkListByNum(int length, T res) {
 	//头结点
 	LinkList* L1 = new LinkList();
-	L1->Ln = NULL;
 	//头指针
 	LinkList* p = L1;
 	for (int i = length - 1; i >= 0; i--)
@@ -115,7 +118,6 @@ LinkList<T>* LinkList<T>::CreatLinkList_head(int length)
 {
 	//头结点
 	LinkList* L1 = new LinkList();
-	L1->Ln = NULL;
 	//头指针
 	LinkList* p = L1;
 	for (int i = length - 1; i >= 0; i--)
@@ -169,7 +171,7 @@ int LinkList<T>::LinkListlength()
 	LinkList<T>* temp = this->Ln;
 	if (temp == NULL || temp->Ln == NULL)
 	{
-		std::cout << "error" << std::endl;
+		std::cout << "linklist is NULL" << std::endl;
 		return -1;
 	}
 	temp = temp->Ln;
@@ -210,9 +212,9 @@ LinkList<T>* LinkList<T>::LinkListTraverse(int n)
 	LinkList<int>* L = this->Ln;
 	if (n == 0)
 	{
-		return L;
+		return L->Ln;
 	}
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i <= n; i++)
 	{
 		if (L != NULL)
 		{
@@ -257,35 +259,6 @@ void LinkList<T>::InsertLinkList(int e)
 	}
 }
 
-//在指定位置插入指定值
-template<class T>
-LinkList<T>* LinkList<T>::InsertValue(LinkList* L, int e,int num)
-{
-	if (e <= 0)
-	{
-		std::cout << "ERROR" << std::endl;
-		return 0;
-	}
-	LinkList* p = new LinkList();
-	p->Ln = NULL;
-	p -> val = num;
-	//头结点的下一个为空，即只有一个头结点
-	if (L->Ln == NULL)
-	{
-		L->Ln = p;
-	}
-	//取到前一个元素的指针域
-	else
-	{
-		LinkList* temp = LinkListTraverse(L, e - 1);
-		//新建结点的指针域指向索引前的指针域
-		p->Ln = temp->Ln;
-		//修改索引前的指针域指向新建指针
-		temp->Ln = p;
-	}
-	return L;
-}
-
 //获得指定索引的值
 template<class T>
 T LinkList<T>::getvalLinkList(int e)
@@ -303,85 +276,64 @@ T LinkList<T>::getvalLinkList(int e)
 	return l1->val;
 }
 
-//清空链表
-template<class T>
-void LinkList<T>::ClearLinkList()
-{
-
-	LinkList* link = this->Ln;
-
-	while(link != NULL)
-	{
-		LinkList* temp = link;
-		link = link->Ln;
-		delete temp;
-	}
-	delete link;
-}
-
 //删除链表
 template<class T>
 void LinkList<T>::DeleteLinkList()
 {
-	LinkList* L = this;
-	int length = this->LinkListlength();
-	for (int i = 0; i < length - 1; i++)
-	{
-		LinkList* temp = L->Ln;
-		delete L;
-		L = temp->Ln;
+	LinkList<T>* current = this;
+	LinkList<T>* next = nullptr;
+
+	while (current->Ln != NULL) {
+		next = current->Ln;
+		free(current);
+		current = next;
 	}
 }
 
 //合并链表
 template<class T>
-LinkList<T>* LinkList<T>::groupLinkList(LinkList* L1, LinkList* L2)
+void LinkList<T>::groupLinkList(LinkList* L2)
 {
-	int length1 = LinkListlength(L1);
-	int length2 = LinkListlength(L2);
-	LinkList* temp = L1;
-	for (int i = 0; i < length1; i++)
+	int length1 = this->LinkListlength();
+	int length2 = L2->LinkListlength();
+	LinkList* temp = this;
+	for (int i = 0; i <= length1; i++)
 	{
 		temp = temp->Ln;
 	}
-	temp->Ln = L2->Ln;
-	return L1;
+	temp->Ln = L2->Ln->Ln;
 }
 
 //反转链表
 template<class T>
-LinkList<T>* LinkList<T>::reverseLinkList(LinkList* L)
+void LinkList<T>::reverseLinkList()
 {
-	LinkList* nL = new LinkList();
-	nL->Ln = NULL;
-	int length = LinkListlength(L);
-	L = L->Ln;
+	LinkList* prev = nullptr;
+	LinkList* current = this->Ln;
+	LinkList* next = nullptr;
 
-	for (int i = 0; i < length; i++)
-	{
-		int val = L->val;
-
-		LinkList* temp2 = new LinkList();
-
-		temp2->val = val;
-
-		temp2->Ln = nL->Ln;
-
-		nL->Ln = temp2;
-
-		L = L->Ln;
+	while (current != nullptr) {
+		next = current->Ln; // 保存下一个节点
+		current->Ln = prev; // 反转当前节点的指针
+		prev = current; // 移动prev指针
+		current = next; // 移动current指针
 	}
-	return nL;
+	this->Ln = prev; // 重新设置头节点为反转后的第一个节点
 }
 
 //求和链表上的数
 template<class T>
-T LinkList<T>::countLinkList(LinkList* L)
+T LinkList<T>::countLinkList()
 {
-	int length = LinkListlength(L);
-	L = L->Ln;
+	if (this->Ln == NULL) {
+		std::cout <<  "the LinkList is NULL!" << std::endl;
+	}
+
+	int length = this->LinkListlength();
+	LinkList* L = this->Ln;
+
 	int count = 0;
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i <= length; i++)
 	{
 		count += L->val;
 		L = L->Ln;
@@ -391,25 +343,65 @@ T LinkList<T>::countLinkList(LinkList* L)
 
 //交换两索引上的数
 template<class T>
-LinkList<T>* LinkList<T>::exchangeLinkList(LinkList* L1, int l1, int l2)
+void LinkList<T>::exchangeLinkList(int l1, int l2)
 {
 
-	LinkList* nL1 = LinkListTraverse(L1, l1);
-	LinkList* nL2 = LinkListTraverse(L1, l2);
-	int temp = 0;
+	LinkList* nL1 = this->LinkListTraverse(l1);
+	LinkList* nL2 = this->LinkListTraverse(l2);
+
+	T temp = 0;
+
 	temp = nL1->val;
 	nL1->val = nL2->val;
 	nL2->val = temp;
-	return L1;
 }
 
 //删除指定节点
 template<class T>
-LinkList<T>* LinkList<T>::deleteLinkListbyid(LinkList* L, int l1)
+void LinkList<T>::deleteLinkListbyid(int l1)
 {
-	LinkList* temp1 = LinkListTraverse(L, l1 - 1);
-	LinkList* temp2 = LinkListTraverse(L, l1);
+	LinkList* temp1 = this->LinkListTraverse(l1 - 1);
+	LinkList* temp2 = this->LinkListTraverse(l1);
+
 	temp1->Ln = temp2->Ln;
-	delete temp2;
-	return L;
+}
+
+template<class T>
+void LinkList<T>::insertHead(int num) {
+
+}
+
+//在指定位置插入指定值
+template<class T>
+void LinkList<T>::InsertValue(int e, int num)
+{
+	if (e < 0)
+	{
+		std::cout << "ERROR" << std::endl;
+		return;
+	}
+	else if (e == 0) {
+		this->insertHead(num);
+		return;
+	}
+	LinkList* p = new LinkList();
+	p->Ln = NULL;
+	p->val = num;
+
+	LinkList<T>* L = this->Ln;
+
+	//头结点的下一个为空，即只有一个头结点
+	if (L->Ln == NULL)
+	{
+		L->Ln = p;
+	}
+	//取到前一个元素的指针域
+	else
+	{
+		LinkList* temp = L->LinkListTraverse( e - 1);
+		//新建结点的指针域指向索引前的指针域
+		p->Ln = temp->Ln;
+		//修改索引前的指针域指向新建指针
+		temp->Ln = p;
+	}
 }
