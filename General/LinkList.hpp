@@ -1,18 +1,23 @@
 #pragma once
-#include <iostream>
 
 template<class T>
 class LinkList
 {
 public:
 	LinkList();
+
 	LinkList(int len);
+
 	LinkList(int len, T res);
+
 	~LinkList();
-	//创建链表--头插法
-	//传入一个带头结点的链表
+
+	//创建链表头插法
 	LinkList* CreatLinkList_head(int length);
+
+	//创建指定长度，固定值的链表
 	LinkList* CreateLinkListByNum(int length, T res);
+
 	//创建链表尾插法
 	LinkList* CreatLinkList_back(int length);
 
@@ -33,9 +38,6 @@ public:
 	//获得指定索引的值
 	T getvalLinkList(int e);
 
-	//清空链表
-	void ClearLinkList();
-
 	//删除链表
 	void DeleteLinkList();
 
@@ -53,10 +55,15 @@ public:
 
 	//删除指定节点
 	void deleteLinkListbyid(int l1);
+
 	//在指定位置插入指定值
-	void InsertValue(int e, int num);
-	//头插入元素
-	void insertHead(int num);
+	void InsertValue(int e, T val);
+
+	//头插入法
+	void insertHead(T val);
+
+	//尾插法
+	void insertBack(T val);
 private:
 	T val;
 	LinkList* Ln;
@@ -309,7 +316,10 @@ template<class T>
 void LinkList<T>::reverseLinkList()
 {
 	LinkList* prev = nullptr;
-	LinkList* current = this->Ln;
+
+	//LinkList* current = this->Ln;
+	LinkList* current = this->Ln->Ln;
+
 	LinkList* next = nullptr;
 
 	while (current != nullptr) {
@@ -318,7 +328,8 @@ void LinkList<T>::reverseLinkList()
 		prev = current; // 移动prev指针
 		current = next; // 移动current指针
 	}
-	this->Ln = prev; // 重新设置头节点为反转后的第一个节点
+	//this->Ln = prev;
+	this->Ln->Ln = prev; // 重新设置头节点为反转后的第一个节点
 }
 
 //求和链表上的数
@@ -326,7 +337,7 @@ template<class T>
 T LinkList<T>::countLinkList()
 {
 	if (this->Ln == NULL) {
-		std::cout <<  "the LinkList is NULL!" << std::endl;
+		std::cout <<  "The LinkList is NULL!" << std::endl;
 	}
 
 	int length = this->LinkListlength();
@@ -366,14 +377,36 @@ void LinkList<T>::deleteLinkListbyid(int l1)
 	temp1->Ln = temp2->Ln;
 }
 
+//头插法
 template<class T>
-void LinkList<T>::insertHead(int num) {
+void LinkList<T>::insertHead(T val) {
+	LinkList* temp = new LinkList();
+	temp->val = val;
 
+	//temp->Ln = this->Ln;
+	temp->Ln = this->Ln->Ln;
+
+	//this->Ln = temp;
+	this->Ln->Ln = temp;
+}
+
+//尾插法
+template<class T>
+void LinkList<T>::insertBack(T val) {
+	LinkList* temp = new LinkList();
+	temp->val = val;
+
+	LinkList* current = this->Ln;
+	while (current->Ln != NULL)
+	{
+		current = current->Ln;
+	}
+	current->Ln = temp;
 }
 
 //在指定位置插入指定值
 template<class T>
-void LinkList<T>::InsertValue(int e, int num)
+void LinkList<T>::InsertValue(int e, T val)
 {
 	if (e < 0)
 	{
@@ -381,12 +414,12 @@ void LinkList<T>::InsertValue(int e, int num)
 		return;
 	}
 	else if (e == 0) {
-		this->insertHead(num);
+		this->insertHead(val);
 		return;
 	}
 	LinkList* p = new LinkList();
 	p->Ln = NULL;
-	p->val = num;
+	p->val = val;
 
 	LinkList<T>* L = this->Ln;
 

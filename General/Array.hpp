@@ -1,14 +1,14 @@
 #pragma once
-#include <iostream>
 
 template<class T>
 class Array
 {
 public:
-	/*构造器*/
 	~Array();
+
 	Array(int len);
-	Array(int len, T num);
+
+	Array(int len, T val);
 
 	/*获取数组长度*/
 	int Arraylength();
@@ -35,7 +35,7 @@ public:
 	void ClearArray();
 
 	//交换两索引上的数
-	void ExchangeArrayById(int n1,int n2);
+	void ExchangeArrayById(T n1,T n2);
 
 	//反转数组
 	void ReverseArray();
@@ -44,7 +44,7 @@ public:
 	void PrintArrayFromTo(int front, int rear);
 
 	//修改指定索引的值
-	void ChangeValue(int index,int value);
+	void ChangeValue(int index,T value);
 private:
 	int len;
 	T* arr;
@@ -58,7 +58,7 @@ Array<T>::~Array()
 	free(this->arr);
 }
 
-//构造器
+//构造函数
 template<class T>
 Array<T>::Array(int len)
 {
@@ -75,7 +75,7 @@ Array<T>::Array(int len)
 
 //构造器
 template<class T>
-Array<T>::Array(int len, T num)
+Array<T>::Array(int len, T val)
 {
 	this->len = len;
 	this->arr = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(len) + 2));
@@ -83,7 +83,7 @@ Array<T>::Array(int len, T num)
 	{
 		for (int j = 0; j < len; j++)
 		{
-			this->arr[j]=num;
+			this->arr[j]=val;
 		}
 	}
 }
@@ -194,7 +194,7 @@ void Array<T>::ClearArray()
 
 //交换两索引上的数
 template<class T>
-void Array<T>::ExchangeArrayById(int n1, int n2)
+void Array<T>::ExchangeArrayById(T n1, T n2)
 {
 	if (this->arr == NULL || this->len < n1 + 1 || this->len < n2 + 1) return;
 	this -> arr[n1] = this -> arr[n1] + this -> arr[n2];
@@ -223,6 +223,6 @@ void Array<T>::ReverseArray()
 
 //修改指定索引的值
 template<class T>
-void Array<T>::ChangeValue(int index, int value) {
+void Array<T>::ChangeValue(int index, T value) {
 	this->arr[index] = value;
 }

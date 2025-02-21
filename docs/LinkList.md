@@ -1,3 +1,5 @@
+## LinkList
+
 ### 1.LinkList();
 
 > 无参构造函数,可用于构造头节点
@@ -179,17 +181,27 @@ list->exchangeLinkList(0, 3); 交换索引为0和3的节点
 list->deleteLinkListbyid(2); 删除索引为2的节点
 ```
 
-### 20.void InsertValue(int e, int num);
+### 20.void InsertValue(int e, T val);
 
 > 在指定位置插入指定值
 
-21.
+```c++
+list->InsertValue(0, 2);
+```
+
+### 21.void insertHead(T val) 
 
 > 头插入元素
 
+```c++
+list->insertHead(5);
+```
 
-
-22.
+### 22.void insertBack(T val)
 
 >尾部插入元素
+
+```c++
+list->insertBack(5);
+```
 
