@@ -1,4 +1,5 @@
 #pragma once
+#include "OutOfIndexException.h"
 
 template<class T>
 class Array
@@ -11,7 +12,7 @@ public:
 	Array(int len, T val);
 
 	/*获取数组长度*/
-	int Arraylength();
+	int GetLength();
 
 	/*打印数组*/
 	void PrintArray();
@@ -26,10 +27,8 @@ public:
 	int ArrayCount();
 
 	/*删除指定节点*/
-	void ArrayDelete(int n);
+	void ArrayDelete(int index);
 
-	/*获得该位置的值*/
-	T ArrayGetById(int n);
 
 	//清空数组
 	void ClearArray();
@@ -43,8 +42,15 @@ public:
 	//按一定顺序打印数组
 	void PrintArrayFromTo(int front, int rear);
 
+	const T& operator[](size_t index) const;
+
+	T& operator[](size_t index);
+
+	/*获得该位置的值*/
+	//T ArrayGetById(int n);
 	//修改指定索引的值
-	void ChangeValue(int index,T value);
+	//void ChangeValue(int index,T value);
+
 private:
 	int len;
 	T* arr;
@@ -62,6 +68,11 @@ Array<T>::~Array()
 template<class T>
 Array<T>::Array(int len)
 {
+	//处理异常情况  创建的长度小于1
+	if (len <= 0) {
+		len = 1;
+	}
+
 	this->len = len;
 	this->arr = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(len) + 2));
 	if (arr != NULL)
@@ -77,6 +88,11 @@ Array<T>::Array(int len)
 template<class T>
 Array<T>::Array(int len, T val)
 {
+	//处理异常情况  创建的长度小于1
+	if (len <= 0) {
+		len = 1;
+	}
+
 	this->len = len;
 	this->arr = (T*)malloc(sizeof(T) * (static_cast<unsigned long long>(len) + 2));
 	if (arr != NULL)
@@ -88,10 +104,25 @@ Array<T>::Array(int len, T val)
 	}
 }
 
+template<class T>
+const T& Array<T>::operator[](size_t index) const {
+	if (index < 0 || index >= len) {
+		throw OutOfIndexException("out of index");
+	}
+	return this->arr[index];
+}
+
+template<class T>
+T& Array<T>::operator[](size_t index) {
+	if (index < 0 || index >= len) {
+		throw OutOfIndexException("out of index");
+	}
+	return this->arr[index];
+}
 
 /*获取数组长度*/
 template<class T>
-int Array<T>::Arraylength()
+int Array<T>::GetLength()
 {
 	return this->len;
 }
@@ -165,23 +196,19 @@ int Array<T>::ArrayCount()
 
 /*删除指定节点*/
 template<class T>
-void Array<T>::ArrayDelete(int n)
+void Array<T>::ArrayDelete(int index)
 {
+	if (index < 0 || index >= len) {
+		throw OutOfIndexException("out of index");
+	}
 	if (this->arr == NULL) return;
-	for (int i = n; i < this->len-1; i++)
+	for (int i = index; i < this->len-1; i++)
 	{
 		arr[i] = arr[i + 1];
 	}
 	this->len--;
 }
 
-/*获得该位置的值*/
-template<class T>
-T Array<T>::ArrayGetById(int n)
-{
-	if (this->arr == NULL || this->len < n + 1) return INT_MIN;
-	return this->arr[n];
-}
 
 //清空数组
 template<class T>
@@ -194,12 +221,15 @@ void Array<T>::ClearArray()
 
 //交换两索引上的数
 template<class T>
-void Array<T>::ExchangeArrayById(T n1, T n2)
+void Array<T>::ExchangeArrayById(T indexo, T indext)
 {
-	if (this->arr == NULL || this->len < n1 + 1 || this->len < n2 + 1) return;
-	this -> arr[n1] = this -> arr[n1] + this -> arr[n2];
-	this -> arr[n2] = this -> arr[n1] - this -> arr[n2];
-	this -> arr[n1] = this -> arr[n1] - this -> arr[n2];
+	if (this->arr == NULL) return;
+	if (indexo < 0 || indexo >= len || indext < 0 || indext >= len) {
+		throw OutOfIndexException("out of index");
+	}
+	this -> arr[indexo] = this -> arr[indexo] + this -> arr[indext];
+	this -> arr[indext] = this -> arr[indexo] - this -> arr[indext];
+	this -> arr[indexo] = this -> arr[indexo] - this -> arr[indext];
 }
 
 //反转数组
@@ -221,8 +251,15 @@ void Array<T>::ReverseArray()
 	}
 }
 
-//修改指定索引的值
-template<class T>
-void Array<T>::ChangeValue(int index, T value) {
-	this->arr[index] = value;
-}
+///*获得该位置的值*/
+//template<class T>
+//T Array<T>::ArrayGetById(int n)
+//{
+//	if (this->arr == NULL || this->len < n + 1) return INT_MIN;
+//	return this->arr[n];
+//}
+////修改指定索引的值
+//template<class T>
+//void Array<T>::ChangeValue(int index, T value) {
+//	this->arr[index] = value;
+//}
